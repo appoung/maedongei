@@ -24,7 +24,7 @@ def img_gen(today):
     transposed_df = df.transpose()
 
     # 한글 폰트 설정
-    font_path = '/Users/gooya/fonts/nanum/NanumGothic-Bold.ttf'
+    font_path = 'NanumGothic-Bold.ttf'
     if not os.path.exists(font_path):
         raise FileNotFoundError(f"Font file not found: {font_path}")
     fontprop = fm.FontProperties(fname=font_path)

@@ -31,8 +31,9 @@ if generate_button:
         img_gen(d)
         process_message.empty()
         st.success("매매동향을 성공적으로 불러왔습니다.")
-        st.image('/Users/gooya/Documents/Coding/maedongei/'+str(d)+'_output.png',
+        st.image(str(d)+'_output.png',
                  use_column_width=True)
 
     except Exception as e:
+        st.write(e)
         st.error(d+"의 매매동향 데이터가 없습니다")

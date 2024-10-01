@@ -35,5 +35,4 @@ if generate_button:
                  use_column_width=True)
 
     except Exception as e:
-        st.write(e)
         st.error(d+"의 매매동향 데이터가 없습니다")

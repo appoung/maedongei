@@ -25,15 +25,22 @@ generate_button = st.button("매매동향 불러오기")
 if generate_button:
     process_message = st.info("매매동향을 불러오는 중입니다.")
     d = d.strftime('%Y%m%d')
+    # 오늘 날짜 한글로
+    d_a = d[4:6]+'/'+d[6:]
     try:
         df = stock.get_market_trading_volume_by_date(
             d, d, "082270", etf=True, etn=True, elw=True, detail=True)
         img_gen(d)
         process_message.empty()
-        st.success("매매동향을 성공적으로 불러왔습니다.")
+        success_message = st.success("매매동향을 성공적으로 불러왔습니다.")
         st.image(str(d)+'_output.png',
                  use_column_width=True)
 
     except Exception as e:
-        st.error(e)
-        st.error(d+"의 매매동향 데이터가 없습니다")
+        if 'single positional indexer is out-of-bounds' in str(e):
+            st.error(d_a+"의 매매동향 데이터가 없습니다")
+            process_message.empty()
+        else:
+            st.error("매매동향을 불러오는 중 오류가 발생했습니다.")
+            st.error(e)
+            process_message.empty()

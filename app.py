@@ -12,13 +12,19 @@ today = datetime.today().strftime('%Y%m%d')
 today_a = datetime.today().strftime('%m/%d')
 # 오늘 날짜의 주가 가져오기
 today_price_data = stock.get_market_ohlcv(today, today, ticker)
+today_jonga = today_price_data.iloc[0, 3]
+print(today_price_data)
+
+today_jonga = f"{today_jonga:,}"  # 숫자 포맷 적용
 # 어제 날짜의 주가 가져오기
 yesterday = (datetime.today() - timedelta(days=1)).strftime('%Y%m%d')
 yesterday_price_data = stock.get_market_ohlcv(yesterday, yesterday, ticker)
 # 어제와 오늘의 변동폭 계산
 
-st.title(today_a+' 젬백스 매매동향')
-st.write(today_price_data)
+st.title('매동이 📈')
+st.header('젬백스 떡상 가즈아🚀🚀')
+st.info(today_jonga)
+st.dataframe(today_price_data, hide_index=True)
 d = st.date_input("매매동향 불러오기", datetime.today(), format='YYYY/MM/DD')
 
 generate_button = st.button("매매동향 불러오기")

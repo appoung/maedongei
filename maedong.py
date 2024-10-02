@@ -22,6 +22,8 @@ def img_gen(today):
 
     # Transpose the DataFrame
     transposed_df = df.transpose()
+    # delete the last row
+    transposed_df = transposed_df[:-1]
 
     # 한글 폰트 설정
     font_path = 'NanumGothic-Bold.ttf'
@@ -30,14 +32,19 @@ def img_gen(today):
     fontprop = fm.FontProperties(fname=font_path)
 
     # 주식 데이터를 기반으로 DataFrame 생성
+ # 주식 데이터를 기반으로 DataFrame 생성
     df_for_plot = pd.DataFrame({
         '항목': transposed_df.index,  # 주식 데이터의 인덱스를 항목으로 설정
-        '값': transposed_df.iloc[:, 0]  # 첫 번째 열을 값으로 설정 (예: 거래량 데이터)
+        '값': transposed_df.iloc[:, 0].astype(int)  # 숫자를 먼저 int로 변환
     })
+
+    df_for_plot['값'] = df_for_plot['값'].apply(lambda x: f"{x:,}")
+    # 숫자 포맷 적용
 
     # 색상 설정 함수
 
     def set_color(value):
+        value = int(value.replace(',', ''))
         if value > 0:
             return 'red'
         elif value < 0:
@@ -59,6 +66,7 @@ def img_gen(today):
         table[(i + 1, 1)].set_text_props(color=set_color(key),
                                          fontsize=12, fontproperties=fontprop)
         table[(i + 1, 0)].set_text_props(fontproperties=fontprop)
+    # 마지막 데이터는 삭제
 
     # 여백 설정
     plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
@@ -72,7 +80,7 @@ def img_gen(today):
     try:
         img = Image.open('output.png')
         # 위에서 50 픽셀 자르기
-        cropped_img = img.crop((0, 120, img.width, img.height))
+        cropped_img = img.crop((0, 153, img.width, img.height))
 
         # 하얀색 빈 공간 추가
         white_space_height = 50  # 추가할 하얀색 공간의 높이
@@ -88,4 +96,5 @@ def img_gen(today):
 
         print("이미지가 성공적으로 저장되었습니다!")
     except Exception as e:
+        print(e)
         print(f"이미지를 처리하는 도중 오류가 발생했습니다: {e}")
